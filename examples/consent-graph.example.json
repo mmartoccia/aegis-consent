@@ -1,0 +1,131 @@
+{
+  "metadata": {
+    "version": "0.1.0",
+    "description": "Example Aegis consent graph -- 5 realistic domains",
+    "owner": "your-agent-name",
+    "created_at": "2025-01-01",
+    "updated_at": "2025-01-01"
+  },
+
+  "domains": {
+
+    "messaging": {
+      "_design_note": "Reading is always safe. Sending should notify. Bulk actions are off-limits.",
+      "autonomous": [
+        "read",
+        "list_threads",
+        "search"
+      ],
+      "requires_approval": [
+        "send",
+        "reply",
+        "forward",
+        "mark_read"
+      ],
+      "blocked": [
+        "bulk_send",
+        "delete_thread",
+        "impersonate_user"
+      ],
+      "trust_level": "high"
+    },
+
+    "calendar": {
+      "_design_note": "Creating events changes the operator's schedule. Always notify or ask.",
+      "autonomous": [
+        "read",
+        "list_events",
+        "check_availability"
+      ],
+      "requires_approval": [
+        "create_event",
+        "update_event",
+        "cancel_event",
+        "send_invite"
+      ],
+      "blocked": [
+        "delete_all_events",
+        "share_calendar_externally"
+      ],
+      "trust_level": "medium"
+    },
+
+    "filesystem": {
+      "_design_note": "Reads are safe. Writes need a human in the loop. Deletes are never autonomous.",
+      "autonomous": [
+        "read",
+        "list",
+        "stat",
+        "search"
+      ],
+      "requires_approval": [
+        "write",
+        "create",
+        "rename",
+        "copy"
+      ],
+      "blocked": [
+        "delete",
+        "delete_recursive",
+        "format",
+        "chmod_recursive"
+      ],
+      "trust_level": "low"
+    },
+
+    "web_search": {
+      "_design_note": "Retrieval is safe. Submitting anything on behalf of the user requires approval.",
+      "autonomous": [
+        "search",
+        "fetch_page",
+        "extract_content"
+      ],
+      "requires_approval": [
+        "post_content",
+        "submit_form",
+        "create_account",
+        "authenticate"
+      ],
+      "blocked": [
+        "purchase",
+        "accept_terms_on_behalf_of_user",
+        "store_credentials"
+      ],
+      "trust_level": "medium"
+    },
+
+    "home_automation": {
+      "_design_note": "Safety-critical. Reading sensors is fine. Physical actions need approval. Security features are blocked.",
+      "autonomous": [
+        "read_sensor",
+        "check_status",
+        "get_temperature",
+        "list_devices"
+      ],
+      "requires_approval": [
+        "set_thermostat",
+        "turn_on_lights",
+        "turn_off_lights",
+        "lock_door",
+        "unlock_door",
+        "arm_alarm"
+      ],
+      "blocked": [
+        "disable_alarm",
+        "disarm_alarm",
+        "factory_reset",
+        "share_access",
+        "modify_security_rules"
+      ],
+      "trust_level": "high"
+    }
+
+  },
+
+  "consent_decay": {
+    "enabled": true,
+    "review_interval_days": 30
+  },
+
+  "last_reviewed": null
+}
